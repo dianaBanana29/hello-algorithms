@@ -45,21 +45,20 @@ int size();
  * @return regular Java Array containing all the collection object
  */
 default T[] toArray(T[] ar) {
-	
-Iterator<T> it = iterator();
-if(ar.length < size()) {
-ar = Arrays.copyOf(ar, size());
-	return ar;
-}
-	int i = 0;
-if(ar.length > size()) {
-while(it.hasNext()) {
-ar[i++]	= it.next();
- }
-  Arrays.fill(ar, i, ar.length - 1, null);
-  return ar;
-}	
-return ar;
+	 int size = size();
+	    T[] r = ar.length >= size ? ar  : (T[]) Arrays.copyOf(ar, size);
+	    Iterator<T> it = iterator();
+
+	    for (int i = 0; i < r.length; i++) {
+	        if (!it.hasNext()) { 
+	            if (ar != r)
+	                return Arrays.copyOf(r, i);
+	            r[i] = null;
+	            return r;
+	        }
+	        r[i] = (T) it.next();
+	    }
+	    return  r;
 }
 }
 
