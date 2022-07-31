@@ -101,6 +101,7 @@ int current = 0;
 			System.arraycopy(array, index, array, index + 1, size - index);
 			array[index] = obj;
 			size++;
+	
 			return true;
 		}
 		return false;
@@ -120,24 +121,22 @@ int current = 0;
 
 	@Override
 	public int indexOf(Object pattern) {
-		int res = -1;
 		for(int i = 0; i < size;i++) {
 			if(pattern.equals(array[i])) {
-				res = i;
+				return i;
 			}
 		}
-		return res;
+		return -1;
 	}
 
 	@Override
 	public int lastIndexOf(Object pattern) {
-		int res = -1;
 		for(int i = size -1; i > 0; i--) {
 			if(pattern.equals(array[i])) {
-				res = i;
+				return i;
 		}
 		}
-		return res;
+		return -1;
 	}
 	@Override
 	public T get(int index) {
