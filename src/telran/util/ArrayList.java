@@ -21,7 +21,7 @@ int current = 0;
 	@Override
 	public boolean hasNext() {
 		
-		return current < array.length;
+		return current < size;
 	}
 
 	@SuppressWarnings("unchecked")
