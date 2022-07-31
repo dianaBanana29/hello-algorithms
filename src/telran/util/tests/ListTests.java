@@ -45,14 +45,14 @@ void removeIndexTest() {
 @Test
 void indexOfTest() {
 	List<Integer> list = (List<Integer>) collection;
-	list.add(1);
+	list.add(10, 1);
 	assertEquals(list.indexOf(1), 1);
 }
 
 @Test
 void lastIndexOfTest() {
 	List<Integer> list = (List<Integer>) collection;
-	list.add(2);
+	list.add(10, 2);
 	assertEquals(list.lastIndexOf(2), 10);
 }
 
