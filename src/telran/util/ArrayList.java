@@ -15,8 +15,8 @@ public ArrayList(int capacity) {
 public ArrayList() {
 	this(DEFAULT_CAPACITY);
 }
-@SuppressWarnings("hiding")
-private class ArrayListIterator<T> implements Iterator<T> {
+
+private class ArrayListIterator implements Iterator<T> {
 int current = 0;
 	@Override
 	public boolean hasNext() {
@@ -24,36 +24,30 @@ int current = 0;
 		return current < size;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public T next() {
 		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
-		return (T) array[current++];
+		return array[current++];
 	}
 	}
 	
 	@Override
 	public boolean add(T obj) {
-		if (array.length == size) {
-			array = Arrays.copyOf(array, size * 2);
-		}
+		ensureCapacity();
 		array[size++] = obj;
 		return true;
 	}
 
 	@Override
 	public boolean remove(Object pattern) {
-		boolean flag = false;
-		for(int i = 0; i < size; i++) {
-			if(pattern.equals(array[i])) {
-				System.arraycopy(array, i +1, array, i ,array.length - i -1);
-				size--;
-				flag = true;
-			}
+		int index = indexOf(pattern);
+		if(index < 0) {
+			return false;
 		}
-		return flag;
+		remove(index);
+		return true;
 	}
 
 	@Override
@@ -72,12 +66,8 @@ int current = 0;
 
 	@Override
 	public boolean contains(Object pattern) {
-		for(T num: array) {
-			if(pattern.equals(num)) {
-				return true;
-			}
-		}
-		return false;
+//		
+		return indexOf(pattern) >= 0;
 	}
 
 	@Override
@@ -89,14 +79,12 @@ int current = 0;
 	@Override
 	public Iterator<T> iterator() {
 		
-		return new ArrayListIterator<>();
+		return new ArrayListIterator();
 	}
 
 	@Override
 	public boolean add(int index, T obj) {
-		if (array.length == size) {
-			array = Arrays.copyOf(array, size * 2);
-		}
+		ensureCapacity();
 		if (index >= 0 && index <= size) {
 			System.arraycopy(array, index, array, index + 1, size - index);
 			array[index] = obj;
@@ -105,6 +93,11 @@ int current = 0;
 			return true;
 		}
 		return false;
+	}
+	private void ensureCapacity() {
+		if (array.length == size) {
+			array = Arrays.copyOf(array, size * 2);
+		}
 	}
 
 	@Override
