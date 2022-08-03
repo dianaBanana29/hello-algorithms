@@ -55,20 +55,23 @@ private Node<T> current = head;
 	public boolean remove(Object pattern) {
 		Node<T> current = head;
 		boolean res = false;
-		for(T obj : this) {
+		for(T obj: this) {
 			if(pattern.equals(obj)) {
 				removeNode(current);
 				size--;
 				res = true;
-			}
+				}
 			current = current.next;
-		}
+	 }
 		return res;
 	}
 
 	private void removeNode(Node<T> current) {
 		if(current.equals(head)) {
 			head = head.next;
+			if(head == null) {
+				tail = null;
+			}
 		}
 		else if(current.equals(tail)) {
 			tail = tail.prev;
