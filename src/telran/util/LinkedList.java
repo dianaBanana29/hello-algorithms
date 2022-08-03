@@ -80,7 +80,6 @@ private Node<T> current = head;
 		} else {
 			current.next.prev = current.prev;
 			current.prev.next = current.next;
-			current.obj = null;
 		}
 	}
 
@@ -136,6 +135,7 @@ private Node<T> current = head;
 		afterNode.prev = newNode;
 		beforeNode.next = newNode;
 		newNode.prev = beforeNode;
+		size++;
 		
 	}
 
