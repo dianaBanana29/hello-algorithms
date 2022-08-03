@@ -7,7 +7,7 @@ public class FilterPredicate<T> implements Predicate<T>{
 	@Override
 	public boolean  test(Object t) {
 		
-		return true;
+		return  ((Integer) t % 3 == 0);
 	}
 
 }

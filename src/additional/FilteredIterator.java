@@ -17,18 +17,17 @@ public class FilteredIterator<T> implements Iterator<T> {
 private T nextMatch() {
 		T oldMatch = nextElement;
 		while(srcIterator.hasNext()) {
-			T o = srcIterator.next();
-			if(filter.test(o)) {
+			T obj = srcIterator.next();
+			if(filter.test(obj)) {
 				hasNext = true;
-				nextElement = o;
+				nextElement = obj;
 				return oldMatch;
 			}
 		}
 		hasNext = false;
-		return oldMatch;
-		
+		return oldMatch;	
 	}
-int current = 0;
+
 	@Override
 	public boolean hasNext() {
 		

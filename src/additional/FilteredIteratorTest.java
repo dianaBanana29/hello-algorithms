@@ -9,24 +9,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class FilteredIteratorTest<T> implements Iterable<T> {
-
-
-	@BeforeEach
-	void setUp() throws Exception {
-
-	}
-
+	
+	private static final Integer[] NUMBERS = {0,1,2,3,4,5,6,7,8,9};
+	 Iterator<T> it = iterator();
+	FilteredIterator <T> iter = new FilteredIterator<T>(it, new FilterPredicate<>());
+	
 	@Test
 	void test() {
-		fail("Not yet implemented");
+	while(it.hasNext()) {
+		
+	}
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-	
+		
 		return null;
-	}
+	} 
 
-	
 
 }
