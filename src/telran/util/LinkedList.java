@@ -55,8 +55,8 @@ private Node<T> current = head;
 	public boolean remove(Object pattern) {
 		Node<T> current = head;
 		boolean res = false;
-		for(T obj: this) {
-			if(pattern.equals(obj)) {
+		while(current != null) {
+			if(pattern.equals(current.obj)) {
 				removeNode(current);
 				size--;
 				res = true;
@@ -87,8 +87,8 @@ private Node<T> current = head;
 	public boolean removeIf(Predicate<T> predicate) {
 		boolean res = false;
 		Node<T> current = head;
-		for(T obj: this) {
-			if(predicate.test(obj)) {
+		while(current != null) {
+			if(predicate.test(current.obj)) {
 				remove(current);
 				size--;
 				res = true;
