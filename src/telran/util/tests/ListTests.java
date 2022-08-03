@@ -4,11 +4,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import telran.util.Collection;
 import telran.util.List;
 
-public class ListTests extends CollectionTests {
+abstract class ListTests extends CollectionTests {
+	List<Integer> list;
+	@BeforeEach
+	@Override
+	void setUp() throws Exception {
+		super.setUp(); // content of the collection is {10, -5, 13, 20, 40, 15} from the setup 
+		list = (List<Integer>)collection; //
+	}
 
 	@Test
 	void addIndexTest() {
@@ -31,7 +39,7 @@ public class ListTests extends CollectionTests {
 void removeIndexTest() {
 	List<Integer> list = (List<Integer>) collection;
 	assertEquals(0, list.remove(0));
-	assertEquals(9, list.size());
+    assertEquals(9, list.size());
 	assertEquals(1, list.get(0));
 	assertEquals(3, list.remove(2));
 	assertEquals(8, list.size());
@@ -55,18 +63,10 @@ void lastIndexOfTest() {
 	list.add(10, 2);
 	assertEquals(list.lastIndexOf(2), 10);
 }
-
 @Test
 void getTest() {
 	List<Integer> list = (List<Integer>) collection;
 	assertEquals(0, list.get(0));
 	assertNull(list.get(-1));
 }
-	@Override
-	protected Collection<Integer> createCollection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 }

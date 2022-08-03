@@ -39,5 +39,9 @@ public interface List<T> extends Collection<T> {
 	 * @return the number at the given index for index [0, size - 1] or null for wrong index value 
 	 */
 	T get(int index);
+	
+	default boolean contains(Object pattern) {		
+			return indexOf(pattern) >= 0;
+	}
 
 }

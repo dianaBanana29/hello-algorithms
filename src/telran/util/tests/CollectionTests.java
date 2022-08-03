@@ -43,7 +43,7 @@ protected static int[] NUMBERS_100 = new int[100];
 		assertFalse(collection.remove(15));
 		assertEquals(collection.size(), 9);
 	}
-	@Test
+    @Test
 	void removeIfTest() {
 		assertFalse(collection.removeIf(new FalsePredicate()));
 		assertEquals(collection.size(), 10);
@@ -55,7 +55,7 @@ protected static int[] NUMBERS_100 = new int[100];
 		assertTrue(collection.contains(2));
 		assertFalse(collection.contains(12));
 		
-	}
+}
 	@Test
 	void sizeTest() {
 		assertEquals(collection.size(), 10);
