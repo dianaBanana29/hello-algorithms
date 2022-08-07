@@ -150,17 +150,13 @@ boolean flNext = false;
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
 		int oldSize = size();
-		int  ind = 0;
 		for(int i = 0; i < size; i++) {
 			if(predicate.test(array[i])) {
-				array[i] = null;
-			} else {
-				T tmp = array[i];
-				array[i] = null;
-				array[ind++] = tmp;
-			}
+				System.arraycopy(array, i+1, array, i, size - i);
+				array[size] = null;
+				size--;
+			} 
 		}
-		size = ind;
 		return size < oldSize;
 	}
 

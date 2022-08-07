@@ -118,10 +118,6 @@ public class LinkedList<T> implements List<T> {
 		
 	}
 
-	
-
-	
-
 	@Override
 	public int size() {
 		

@@ -16,7 +16,7 @@ abstract class CollectionTests {
 	protected Collection<Integer> collection;
 
 	protected abstract Collection<Integer> createCollection();
-
+	private static final int N_RUNS = 10000;
 	Integer expected[] = { 10, -5, 13, 20, 40, 15 };
 
 	@BeforeEach
@@ -104,6 +104,20 @@ abstract class CollectionTests {
 			flException = true;
 		}
 		assertTrue(flException);
+	}
+	@Test
+	void removeIfPerformanceTest() {
+		Predicate<Integer> predicate = new FalsePredicate().negate();
+		for (int i = 0; i < N_RUNS; i++) {
+			fillLargeCollection();
+			collection.removeIf(predicate);
+		}
+	}
+	private void fillLargeCollection() {
+		for(int i = 0; i < N_NUMBERS; i++) {
+			collection.add(i);
+		}
+		
 	}
 
 }
