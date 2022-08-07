@@ -149,15 +149,8 @@ boolean flNext = false;
 	}
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
-		int oldSize = size();
-		for(int i = 0; i < size; i++) {
-			if(predicate.test(array[i])) {
-				System.arraycopy(array, i+1, array, i, size - i);
-				array[size] = null;
-				size--;
-			} 
-		}
-		return size < oldSize;
-	}
+		
 
+		return false;
+}
 }
