@@ -149,8 +149,21 @@ boolean flNext = false;
 	}
 	@Override
 	public boolean removeIf(Predicate<T> predicate) {
+		int sizeOld =size();
+		int i2 = 0;
+		for(int i = 0; i < size; i++){
+			if (predicate.test(array[i])) {
+			 array[i] = null;
+			} else if(i2 != i) {
+			array[i2++] = array[i];
+			array[i] = null;
+				} else {
+					return false;
+				}
+			size = i2;
+			}
 		
-
-		return false;
+		return sizeOld > size();
+	
 }
 }
