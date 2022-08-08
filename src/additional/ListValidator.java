@@ -1,6 +1,6 @@
 package additional;
 
-public class CycleCheck{
+public class ListValidator{
 	
 	public static int indexOfCircular(Node head) {
  
