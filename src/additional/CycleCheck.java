@@ -31,7 +31,7 @@ public class CycleCheck{
 				break;
 			}
 		}
-		return res;
+		return res;  
 	}
 	public static void main(String[] args) {
 		Node n0 = new Node(0);
