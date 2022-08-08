@@ -1,20 +1,18 @@
 package additional;
 
-import telran.util.LinkedList;
-
-//import java.util.LinkedList;
-
 public class CycleCheck{
 	
-	public static int isCircle(Node head) {
-  LinkedList<Node> list = new LinkedList<Node>();
+	public static int indexOfCircular(Node head) {
+ 
   Node current = head;
   int res = -1;
   while(current != null) {
 	  Node temp = current;
 	  current = current.next;
-	  if(indexOf(temp, head) > indexOf(current, head)) {
-		  res =  indexOf(temp, head); 
+	  int indCur = indexOf(temp, head);
+	  int indNext = indexOf(current, head);
+	  if(indCur > indNext) {
+		  res =  indCur; 
 		  break;
 	  }
   }
@@ -33,6 +31,12 @@ public class CycleCheck{
 		}
 		return res;  
 	}
+	
+	public static boolean isCircular(Node head) {
+		
+		return indexOfCircular(head) > 0;
+	}
+	
 	public static void main(String[] args) {
 		Node n0 = new Node(0);
 		Node n1 = new Node(1);
@@ -54,7 +58,9 @@ public class CycleCheck{
 		n7.next = n8;
 		n8.next = n9;
 		n9.next = n3;
-		System.out.println(isCircle(n0));
+		System.out.println(isCircular(n0));
+		System.out.println(String.format("Index with wrong reference is: %d", 
+				indexOfCircular(n0)));
 
 	}
 
