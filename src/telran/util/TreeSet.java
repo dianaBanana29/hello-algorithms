@@ -141,11 +141,7 @@ public class TreeSet<T> implements SortedSet<T> {
 	}
 
 	private boolean isJunction(Node<T> node) {
-		boolean res = false;
-		if (node.left != null && node.right != null) {
-			res = true;
-		}
-		return res;
+		return node.left != null && node.right != null;
 	}
 
 	private void removeJunctionNode(Node<T> node) {
@@ -155,24 +151,32 @@ public class TreeSet<T> implements SortedSet<T> {
 	}
 
 	private void removeNonJunctionNode(Node<T> node) {
+		Node<T> child = node.left != null ? node.left : node.right;
 		if (node.left == null && node.right == null) {
-			if (node != root) {
-
-				Node<T> child = node.left != null ? node.left : node.right;
-				if (node != root) {
+	      if (node != root) {
 					if (node == node.parent.left) {
-						node.parent.left = child;
+						node.parent.left = null;
 					} else {
-						node.parent.right = child;
+						node.parent.right = null;
 					}
 
 				} else {
 					root = null;
 				}
+			} else {
+				if(node != root) {
+					if(node == node.parent.left) {
+						node.parent.left = child;
+					} else {
+						node.parent.right = child;
+					}
+				} else {
+					root = child;
+				}
 			}
 
 		}
-	}
+	
 
 	public Node<T> getNode(Object pattern) {
 		Iterator<T> it = new TreeSetIterator();

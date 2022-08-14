@@ -70,12 +70,13 @@ abstract class CollectionTests {
 				assertTrue(num % 2 == 1);
 			}
 		}
+		
 		/**************************************************************/
 		// All removed test
 		assertTrue(collection.removeIf(allFalsePredicate.negate()));
 		assertEquals(0, collection.size());
 	}
-
+	
 	private void fillRandomCollection() {
 		collection = createCollection();
 		for (int i = 0; i < N_RANDOM_NUMBERS; i++) {
