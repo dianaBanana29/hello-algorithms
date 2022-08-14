@@ -36,7 +36,7 @@ public class ListValidator{
 		
 		return indexOfCircular(head) > 0;
 	}
-	
+
 	public static void main(String[] args) {
 		Node n0 = new Node(0);
 		Node n1 = new Node(1);
@@ -58,6 +58,7 @@ public class ListValidator{
 		n7.next = n8;
 		n8.next = n9;
 		n9.next = n3;
+		
 		System.out.println(isCircular(n0));
 		System.out.println(String.format("Index with wrong reference is: %d", 
 				indexOfCircular(n0)));

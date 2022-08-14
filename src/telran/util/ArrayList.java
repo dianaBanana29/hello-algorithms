@@ -147,23 +147,30 @@ boolean flNext = false;
 		
 		return checkExistingIndex(index) ? array[index] : null;
 	}
-	@Override
-	public boolean removeIf(Predicate<T> predicate) {
-		int sizeOld =size();
-		int i2 = 0;
-		for(int i = 0; i < size; i++){
-			if (predicate.test(array[i])) {
-			 array[i] = null;
-			} else if(i2 != i) {
-			array[i2++] = array[i];
-			array[i] = null;
-				} else {
-					return false;
-				}
-			size = i2;
-			}
+public boolean removeIf (Predicate<T> predicate) {
 		
-		return sizeOld > size();
-	
-}
+		boolean res = false;
+		int indDestination = 0;
+		int sizeAfterDeletion = size;
+		for (int indSource = 0; indSource < size; indSource++) {
+			if (predicate.test(array[indSource])) {
+				sizeAfterDeletion--;
+			} else {
+				array[indDestination++] = array[indSource];
+			}
+		}
+		res = afterDeletionProcessing(sizeAfterDeletion);
+		return res;
+	}
+	private boolean afterDeletionProcessing(int sizeAfterDeletion) {
+		boolean res = false;
+		if (sizeAfterDeletion < size) {
+			res = true;
+			for (int i = sizeAfterDeletion; i < size; i++) {
+				array[i] = null;
+			}
+			size = sizeAfterDeletion;
+		}
+		return res;
+	}
 }
