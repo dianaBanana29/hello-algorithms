@@ -114,20 +114,12 @@ public class TreeSet<T> implements SortedSet<T> {
 	}
 	@Override
 	public boolean remove(Object pattern) {
-		Node<T> current = root;
-        boolean res = false;
-       
-		while(current!= null) {
-		if(current.obj.equals(pattern)) {
-			removeNode(current);
-			size--;
-			res = true;
-		} 
-			@SuppressWarnings("unchecked")
-			int compRes = comp.compare((T)pattern, current.obj);
-			current = compRes > 0 ? current.right : current.left;	
-	    }
-		return res;
+		if(getNode(pattern) != null) {
+		removeNode(getNode(pattern));
+		size--;
+		return true;
+		}
+		return false;
 	 }
 
 	private void removeNode(Node<T> node) {
@@ -164,20 +156,21 @@ if( node != root) {
 }
 				
 	}
-	
+	public Node<T> getNode(Object pattern) {
+		Iterator<T> it = new TreeSetIterator();
+		Node<T> current = root;
+		while(it.hasNext()) {
+			if (current.obj.equals(pattern)) {
+				return current;
+			}
+		current.obj = it.next();
+		}
+		return null;
+	}
 	
 	@Override
 	public boolean contains(Object pattern) {
-		
-		Iterator<T> it = new TreeSetIterator();
-		T current = root.obj;
-		while(it.hasNext()) {
-			if (current.equals(pattern)) {
-				return true;
-			}
-		current = it.next();
-		}
-		return false;
+		return getNode(pattern) != null;
 	}
 
 	@Override
