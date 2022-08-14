@@ -116,6 +116,7 @@ public class TreeSet<T> implements SortedSet<T> {
 	public boolean remove(Object pattern) {
 		Node<T> current = root;
         boolean res = false;
+       
 		while(current!= null) {
 		if(current.obj.equals(pattern)) {
 			removeNode(current);
@@ -145,16 +146,22 @@ public class TreeSet<T> implements SortedSet<T> {
 		return res;
 	}
 	private void removeJunctionNode(Node<T> node) {
-	if(isJunction(node.left)) {
-		removeJunctionNode(node.left);
-	} else {
-		node.left = node.left;
-		removeNonJunctionNode(node.left);
-	}
-	
+	Node<T> curr = getLeastNodeFrom(node.right);
+	node.obj = curr.obj;
+	removeNonJunctionNode(curr);
 	}
 	private void removeNonJunctionNode(Node<T> node) {
-	
+	if(node.left == null && node.right == null) {
+		node = null;
+	}
+Node<T> child = node.left != null ? node.left : node.right;
+if( node != root) {
+	if(node == node.parent.left) {
+		node.parent.left = child;
+	} else {
+		node.parent.right = child;
+	} 
+}
 				
 	}
 	
