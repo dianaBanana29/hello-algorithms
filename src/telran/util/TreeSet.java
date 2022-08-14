@@ -144,8 +144,8 @@ public class TreeSet<T> implements SortedSet<T> {
 	}
 	private void removeNonJunctionNode(Node<T> node) {
 	if(node.left == null && node.right == null) {
-		node = null;
-	}
+		if(node != root) {
+	
 Node<T> child = node.left != null ? node.left : node.right;
 if( node != root) {
 	if(node == node.parent.left) {
@@ -153,8 +153,14 @@ if( node != root) {
 	} else {
 		node.parent.right = child;
 	} 
+	
+}
+else {
+	root = null;
+}
 }
 				
+	}
 	}
 	public Node<T> getNode(Object pattern) {
 		Iterator<T> it = new TreeSetIterator();
