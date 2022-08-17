@@ -1,12 +1,6 @@
 package telran.recursion;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 public class LineRecursion {
 public static long factorial(int n) {
-	//TODO
 	if(n == 0) {
 		return 1;
 	}
@@ -20,12 +14,13 @@ public static long factorial(int n) {
  */
 
 public static long pow(long a, long b) {
-
-long res = power(a, b);
-if(a < 0 && b % 2 != 0) {
-	return -(res);
+boolean isEven = b % 2 == 0;
+boolean isPositive = a > 0;
+if(b < 0) {
+	throw new IllegalArgumentException();
 }
-return res;
+long res = power(a, b);
+return (!isPositive && !isEven) ? -res : res;
 }
 
 
