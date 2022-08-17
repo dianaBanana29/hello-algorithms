@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import telran.util.Collection;
 import telran.util.TreeSet;
 
-public class TreeSetTests extends SetTests {
-TreeSet <Integer> tree;
+public class TreeSetTest extends SetTests {
+    TreeSet<Integer> tree;
 	@Override
 	protected Collection<Integer> createCollection() {
 		
@@ -20,22 +20,22 @@ TreeSet <Integer> tree;
 	@Override
 	@BeforeEach
 	void setUp() throws Exception {
-	super.setUp();
-	tree = (TreeSet<Integer>)collection;
+		super.setUp();
+		tree = (TreeSet<Integer>)collection;
 	}
-@Test
-@Override
-void toArrayTest() {
-Arrays.sort(expected);	
-super.toArrayTest();
-}
-@Test
-void firstTest() {
-assertEquals(-5, (int)tree.first())	;
-}
+	@Test
+	@Override
+	void toArrayTest() {
+		Arrays.sort(expected);
+		super.toArrayTest();
+	}
+	@Test
+	void firstTest() {
+		assertEquals((Integer)(-5), tree.first());
+	}
+	@Test
+	void lastTest() {
+		assertEquals((Integer)(40), tree.last());
+	}
 
-@Test
-void lastTest() {
-	assertEquals(40, (int)tree.last())	;	
-}
 }

@@ -1,11 +1,9 @@
 package telran.util.tests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
-
 
 public abstract class SetTests extends CollectionTests {
 
@@ -19,22 +17,6 @@ public abstract class SetTests extends CollectionTests {
 			collection.add(101 + i);
 		}
 		assertEquals(size + N_NUMBERS, collection.size());
-	}
-	@Test
-	@Override
-	void toArrayTest() {
-		Integer[] expected1 = { 10, -5, 13, 20, 40, 15 };
-		 Arrays.sort(expected1);
-		Integer[] res = collection.toArray(new Integer[0]);
-		Arrays.sort(res);
-        assertArrayEquals(expected1, res);
-		assertTrue(expected1 == collection.toArray(expected1));
-		Integer expected2[] = new Integer[100];
-		assertTrue(expected2 == collection.toArray(expected2));
-		assertArrayEquals(expected1, Arrays.copyOf(expected2, res.length));
-		for (int i = res.length; i < expected2.length; i++) {
-			assertNull(expected2[i]);
-		}
 	}
 
 }

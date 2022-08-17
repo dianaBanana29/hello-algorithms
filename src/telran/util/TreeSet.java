@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import javax.naming.OperationNotSupportedException;
+
 public class TreeSet<T> implements SortedSet<T> {
 	private static class Node<T> {
 		T obj;
@@ -19,23 +21,19 @@ public class TreeSet<T> implements SortedSet<T> {
 	private Node<T> root;
 	int size;
 	Comparator<T> comp;
-
 	private Node<T> getLeastNodeFrom(Node<T> node) {
-		while (node.left != null) {
+		while(node.left != null) {
 			node = node.left;
 		}
 		return node;
 	}
-
 	private class TreeSetIterator implements Iterator<T> {
 		Node<T> current = root == null ? null : getLeastNodeFrom(root);
-		boolean flNext;
-		T prevObj;
-		Node<T> prevNode;
-
+		Node<T> prev = null;
+		boolean flNext = false;
 		@Override
 		public boolean hasNext() {
-
+			
 			return current != null;
 		}
 
@@ -44,20 +42,20 @@ public class TreeSet<T> implements SortedSet<T> {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
-			prevObj = current.obj;
+			prev = current;
+			T res = current.obj;
 			updateCurrent();
 			flNext = true;
-			return prevObj;
+			return res;
 		}
-
 		private void updateCurrent() {
 			current = current.right != null ? getLeastNodeFrom(current.right) : getGreaterParent(current);
-
+			
 		}
 
 		private Node<T> getGreaterParent(Node<T> node) {
-
-			while (node.parent != null && node.parent.left != node) {
+			
+			while(node.parent != null && node.parent.left != node) {
 				node = node.parent;
 			}
 			return node.parent;
@@ -68,44 +66,67 @@ public class TreeSet<T> implements SortedSet<T> {
 			if (!flNext) {
 				throw new IllegalStateException();
 			}
-			TreeSet.this.remove(prevObj);
+			if (isJunction(prev)) {
+				current = prev;
+			}
+			removeNode(prev);
 			flNext = false;
 		}
-
+		
 	}
-
 	public TreeSet(Comparator<T> comp) {
 		this.comp = comp;
 	}
-
 	@SuppressWarnings("unchecked")
 	public TreeSet() {
-		this((Comparator<T>) Comparator.naturalOrder());
+		this((Comparator<T>)Comparator.naturalOrder());
 	}
-
 	@Override
 	public boolean add(T obj) {
-		Node<T> parent = getNodeOrParent(obj);
-		boolean res = false;
-		int compRes = 0;
-		if (parent == null || (compRes = comp.compare(obj, parent.obj)) != 0) {
-			// obj doesn't exist
-			Node<T> newNode = new Node<>(obj);
-			if (parent == null) {
-				// added first element that is the root
-				root = newNode;
-			} else if (compRes > 0) {
-				parent.right = newNode;
-			} else {
-				parent.left = newNode;
-			}
-			res = true;
-			newNode.parent = parent;
+		//no cycles allowed
+		Node<T> newNode = new Node<>(obj);
+		boolean res = add(root, newNode);
+		if (res) {
 			size++;
 		}
 		return res;
 	}
 
+	private boolean add(Node<T> parent, Node<T> newNode) {
+		boolean res = true;
+		if (parent == null) {
+			root = newNode;
+		} else {
+			int resComp = comp.compare(newNode.obj, parent.obj);
+			if (resComp == 0) {
+				res = false;
+			} else {
+				if (resComp < 0) {
+					if (parent.left == null) {
+						insert(parent, newNode, true);//new node inserted to left from parent
+					} else {
+						add(parent.left, newNode);
+					}
+				} else {
+					if (parent.right == null) {
+						insert(parent, newNode, false);//new node inserted to right from parent
+					} else {
+						add(parent.right, newNode);
+					}
+				}
+			}
+		}
+		return res;
+	}
+	private void insert(Node<T> parent, Node<T> newNode, boolean isLeft) {
+		if (isLeft) {
+			parent.left = newNode;
+		} else {
+			parent.right = newNode;
+		}
+		newNode.parent = parent;
+		
+	}
 	private Node<T> getNodeOrParent(T obj) {
 		Node<T> current = root;
 		Node<T> parent = null;
@@ -120,15 +141,18 @@ public class TreeSet<T> implements SortedSet<T> {
 		}
 		return parent;
 	}
-
 	@Override
 	public boolean remove(Object pattern) {
-		if (getNode(pattern) != null) {
-			removeNode(getNode(pattern));
-			size--;
-			return true;
+		boolean res = false;
+		@SuppressWarnings("unchecked")
+		T patternT = (T) pattern;
+		Node<T> node = getNodeOrParent(patternT);
+		if (node != null && comp.compare(node.obj, patternT) == 0) {
+			res = true;
+			removeNode(node);
 		}
-		return false;
+		
+		return res;
 	}
 
 	private void removeNode(Node<T> node) {
@@ -137,73 +161,53 @@ public class TreeSet<T> implements SortedSet<T> {
 		} else {
 			removeNonJunctionNode(node);
 		}
-
+		size--;
+		
 	}
-
+	private void removeNonJunctionNode(Node<T> node) {
+		Node<T> child = node.left == null ? node.right : node.left;
+		Node<T> parent = node.parent;
+		if(parent == null) {
+			root = child;
+		} else {
+			if (parent.left == node) {
+				parent.left = child;
+			} else {
+				parent.right = child;
+			}
+		}
+		if (child != null) {
+			child.parent = parent;
+		}
+		
+	}
+	private void removeJunctionNode(Node<T> node) {
+		Node<T> substitution = getLeastNodeFrom(node.right);
+		node.obj = substitution.obj;
+		removeNonJunctionNode(substitution);
+		
+	}
 	private boolean isJunction(Node<T> node) {
+		
 		return node.left != null && node.right != null;
 	}
-
-	private void removeJunctionNode(Node<T> node) {
-		Node<T> curr = getLeastNodeFrom(node.right);
-		node.obj = curr.obj;
-		removeNonJunctionNode(curr);
-	}
-
-	private void removeNonJunctionNode(Node<T> node) {
-		Node<T> child = node.left != null ? node.left : node.right;
-		if (node.left == null && node.right == null) {
-	      if (node != root) {
-					if (node == node.parent.left) {
-						node.parent.left = null;
-					} else {
-						node.parent.right = null;
-					}
-
-				} else {
-					root = null;
-				}
-			} else {
-				if(node != root) {
-					if(node == node.parent.left) {
-						node.parent.left = child;
-					} else {
-						node.parent.right = child;
-					}
-				} else {
-					root = child;
-				}
-			}
-
-		}
-	
-
-	public Node<T> getNode(Object pattern) {
-		Iterator<T> it = new TreeSetIterator();
-		Node<T> current = root;
-		while (it.hasNext()) {
-			if (current.obj.equals(pattern)) {
-				return current;
-			}
-			current.obj = it.next();
-		}
-		return null;
-	}
-
 	@Override
 	public boolean contains(Object pattern) {
-		return getNode(pattern) != null;
+		@SuppressWarnings("unchecked")
+		T tPattern = (T)pattern;
+		Node<T> node = getNodeOrParent(tPattern);
+		return node != null && comp.compare(tPattern, node.obj) == 0;
 	}
 
 	@Override
 	public int size() {
-
+		
 		return size;
 	}
 
 	@Override
 	public Iterator<T> iterator() {
-
+		
 		return new TreeSetIterator();
 	}
 
@@ -215,6 +219,7 @@ public class TreeSet<T> implements SortedSet<T> {
 		return getLeastNodeFrom(root).obj;
 	}
 
+	
 	@Override
 	public T last() {
 		if (root == null) {
@@ -222,9 +227,8 @@ public class TreeSet<T> implements SortedSet<T> {
 		}
 		return getMostNodeFrom(root).obj;
 	}
-
 	private Node<T> getMostNodeFrom(Node<T> node) {
-		while (node.right != null) {
+		while(node.right != null) {
 			node = node.right;
 		}
 		return node;

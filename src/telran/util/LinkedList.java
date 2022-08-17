@@ -248,16 +248,27 @@ public class LinkedList<T> implements List<T> {
 	 * current - {10, -5, 30} - after reverse - {30, -5. 10}
 	 */
 	public void reverse() {
+		//TODO
+		//no cycles, to do with recursion
 		Node<T> current = head;
-		Node<T> prev = null;
+		//Node<T> prev = null;
 		Node<T> next = null;
-		while(current != null) {
-			next = current.next;
-			current.next = prev;
-			prev = current;
-			current = next;
+		reverse(current, next);
+			next = head;
+			head = tail;
+			tail = next;
 		}
-		head = prev;
+		
+
+	private void reverse(Node<T> current, Node<T> next) {
+		if(current != null) {
+			next = current.next;
+			current.next = current.prev;
+			current.prev = next;
+			current = current.prev;
+			reverse(current, next);
+		}
+		
 	}
 
 }
