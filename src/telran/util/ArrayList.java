@@ -3,10 +3,9 @@ package telran.util;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
-public class ArrayList<T> implements List<T> {
+public class ArrayList<T> extends AbstractCollection<T> implements List<T> {
 private static final int DEFAULT_CAPACITY = 16;
 private T[] array;
-private int size;
 @SuppressWarnings("unchecked")
 public ArrayList(int capacity) {
 	array = (T[]) new Object[capacity];
@@ -70,16 +69,6 @@ boolean flNext = false;
 		array[size] = null; //solution for preventing memory leak;
 	}
 
-	
-
-	
-
-	@Override
-	public int size() {
-		
-		return size;
-	}
-
 	@Override
 	public Iterator<T> iterator() {
 		
@@ -110,22 +99,6 @@ boolean flNext = false;
 			res = array[index];
 			removeByIndex(index);
 			
-		}
-		return res;
-	}
-
-	private boolean checkExistingIndex(int index) {
-		
-		return index >= 0 && index < size;
-	}
-	@Override
-	public int indexOf(Object pattern) {
-		int res = -1;
-		for(int i = 0; i < size; i++) {
-			if (array[i].equals(pattern)) {
-				res = i;
-				break;
-			}
 		}
 		return res;
 	}

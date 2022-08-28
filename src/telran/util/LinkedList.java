@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public class LinkedList<T> implements List<T> {
+public class LinkedList<T> extends AbstractCollection<T> implements List<T> {
 	public static class Node<T> {
 		T obj;
 		Node<T> next;
@@ -15,8 +15,7 @@ public class LinkedList<T> implements List<T> {
 	}
 	private Node<T> head;
 	private Node<T> tail;
-	private int size;
-	
+
 	public class LinkedListIterator implements Iterator<T> {
 		Node<T> current = head;
 		boolean flNext = false;
@@ -119,12 +118,6 @@ public class LinkedList<T> implements List<T> {
 	}
 
 	@Override
-	public int size() {
-		
-		return size;
-	}
-
-	@Override
 	public Iterator<T> iterator() {
 		
 		return new LinkedListIterator();
@@ -188,13 +181,6 @@ public class LinkedList<T> implements List<T> {
 		newNode.next = head;
 		head.prev = newNode;
 		head = newNode;
-		
-		
-	}
-
-	private boolean checkExistingIndex(int index) {
-		
-		return index >= 0 && index < size;
 	}
 
 	@Override
@@ -204,19 +190,6 @@ public class LinkedList<T> implements List<T> {
 			Node<T> node = getNodeIndex(index);
 			res = node.obj;
 			removeNode(node);
-		}
-		return res;
-	}
-
-	@Override
-	public int indexOf(Object pattern) {
-		int res = -1;
-		int ind = 0;
-		for(Node<T> current = head; current != null; current = current.next, ind++) {
-			if (current.obj.equals(pattern)) {
-				res = ind;
-				break;
-			}
 		}
 		return res;
 	}

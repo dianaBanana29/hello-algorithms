@@ -11,4 +11,11 @@ T first();
  * @return reference to the most object
  */
 T last();
+/**
+ * 
+ * @param pattern
+ * @return
+ */
+T ceiling(T pattern);
+T floor(T pattern);
 }

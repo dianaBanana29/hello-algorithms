@@ -23,7 +23,22 @@ public interface List<T> extends Collection<T> {
  * @param pattern
  * @return index of the first object equaled to the given pattern
  */
-	int indexOf(Object pattern);
+	default int indexOf(Object pattern) {
+		int index = 0;
+		int res = -1;
+		for(T obj : this) {
+			if(obj.equals(pattern)) {
+		res = index;
+		break;
+			}
+			index++;
+		}
+		return res;
+	}
+default boolean checkExistingIndex(int index) {
+		
+		return index >= 0 && index < size();
+	}
 	/******************************************************/
 	/**
 	 * 

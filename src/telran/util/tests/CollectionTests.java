@@ -12,24 +12,26 @@ import org.junit.jupiter.api.Test;
 import telran.util.Collection;
 
 abstract class CollectionTests {
-	protected static final int N_NUMBERS = 100;
+	protected static final int N_NUMBERS = 10000;
+	protected static final int N_RANDOM_NUMBERS = 100;
+	private static final int N_RUNS = 10000;
+	private static final int N_RANDOM_RUNS = 10;
 	protected Collection<Integer> collection;
 
 	protected abstract Collection<Integer> createCollection();
-	private static final int N_RUNS = 10000;
+
 	Integer expected[] = { 10, -5, 13, 20, 40, 15 };
-	private static final int N_RANDOM_RUNS = 10;
-	private static final int N_RANDOM_NUMBERS = 100;
+	Integer largeArray[] = new Integer[N_NUMBERS];
 
 	@BeforeEach
 	void setUp() throws Exception {
 		collection = createCollection();
-		fillCollection();
+		fillCollection(expected);
 
 	}
 
-	private void fillCollection() {
-		for (Integer num : expected) {
+	protected void fillCollection(Integer[]array) {
+		for (Integer num : array) {
 			collection.add(num);
 		}
 
@@ -57,36 +59,38 @@ abstract class CollectionTests {
 
 	@Test
 	void removeIfTest() {
-		Predicate<Integer> allFalsePredicate = new AllFalsePredicate();
+		
 		// Nothing removed test
-		assertFalse(collection.removeIf(allFalsePredicate));
+		assertFalse(collection.removeIf(obj -> false));
 		assertEquals(expected.length, collection.size());
 		/************************************************************/
 		// even numbers removed test
 		for (int i = 0; i < N_RANDOM_RUNS; i++) {
 			fillRandomCollection();
-			collection.removeIf(new EvenNumbersPredicate());
+			collection.removeIf(obj-> obj%2 == 0);
 			for (int num : collection) {
 				assertTrue(num % 2 == 1);
 			}
 		}
-		
 		/**************************************************************/
 		// All removed test
-		assertTrue(collection.removeIf(allFalsePredicate.negate()));
+		assertTrue(collection.removeIf(obj -> true));
 		assertEquals(0, collection.size());
 	}
-	
+
 	private void fillRandomCollection() {
 		collection = createCollection();
 		for (int i = 0; i < N_RANDOM_NUMBERS; i++) {
 			collection.add((int) (Math.random() * Integer.MAX_VALUE));
 		}
 
-	}	
+	}
+
 	@Test
 	void containsTest() {
 		assertTrue(collection.contains(10));
+		assertTrue(collection.contains(-5));
+		assertTrue(collection.contains(40));
 		assertFalse(collection.contains(1000));
 	}
 
@@ -107,17 +111,42 @@ abstract class CollectionTests {
 	void sizeTest() {
 		assertEquals(expected.length, collection.size());
 	}
+
 	@Test
 	void wrongIteratorRemoveTest() {
 		Iterator<Integer> it = collection.iterator();
-		wrongRemove(it); //first remove
+		wrongRemove(it); // first remove
 		it.next();
 		it.next();
-		it.remove(); //two removes with no next
+		it.remove(); // two removes with no next
 		wrongRemove(it);
 	}
 
-	protected  void wrongRemove(Iterator<Integer> it) {
+	//@Test
+	void removeIfPerformanceTest() {
+		fillArraySequence(largeArray);
+		orderLargeArray();
+		for (int i = 0; i < N_RUNS; i++) {
+			fillCollection(largeArray);
+			collection.removeIf(obj -> false);
+		}
+	}
+
+	
+
+	 protected void orderLargeArray() {
+		
+		
+	}
+
+	void fillArraySequence(Integer[] array) {
+		for(int i = 0; i < array.length; i++) {
+			array[i] = i;
+		}
+		
+	}
+
+	protected void wrongRemove(Iterator<Integer> it) {
 		boolean flException = false;
 		try {
 			it.remove();
@@ -127,18 +156,9 @@ abstract class CollectionTests {
 		assertTrue(flException);
 	}
 	@Test
-	void removeIfPerformanceTest() {
-		Predicate<Integer> predicate = new AllFalsePredicate().negate();
-		for (int i = 0; i < N_RUNS; i++) {
-			fillLargeCollection();
-			collection.removeIf(predicate);
-		}
-	}
-	private void fillLargeCollection() {
-		for(int i = 0; i < N_NUMBERS; i++) {
-			collection.add(i);
-		}
-		
+	void emptyCollectionTest() {
+		collection = createCollection();
+		assertArrayEquals(new Integer[0], collection.toArray(new Integer[0]));
 	}
 
 }
