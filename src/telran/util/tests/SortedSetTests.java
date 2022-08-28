@@ -23,16 +23,18 @@ public abstract class SortedSetTests extends SetTests {
 	void lastTest() {
 		assertEquals((Integer)(40), ((SortedSet<Integer>)collection).last());
 	}
-	
-void ceilingTest() {
-	assertEquals(40, (int)((SortedSet<Integer>)collection).ceiling(40));
-	assertEquals(40, (int)((SortedSet<Integer>)collection).ceiling(35));
-	assertNull(null, (int)((SortedSet<Integer>)collection).ceiling(41));
-}
-void floorTest() {
-	assertEquals(-5, (int)((SortedSet<Integer>)collection).floor(-5));
-	assertEquals(-5, (int)((SortedSet<Integer>)collection).floor(0));
-	assertNull(null, (int)((SortedSet<Integer>)collection).floor(-6));
-}
+	@Test
+	void ceilingtTest() {
+		assertEquals((Integer)(40), ((SortedSet<Integer>)collection).ceiling(40));
+		assertEquals((Integer)(40), ((SortedSet<Integer>)collection).ceiling(35));
+		assertNull(((SortedSet<Integer>)collection).ceiling(41));
+	}
+	@Test
+	void floorTest() {
+		assertEquals((Integer)(-5), ((SortedSet<Integer>)collection).floor(-5));
+		assertEquals((Integer)(-5), ((SortedSet<Integer>)collection).floor(0));
+		assertEquals((Integer)(10), ((SortedSet<Integer>)collection).floor(11));
+		assertNull(((SortedSet<Integer>)collection).floor(-6));
+	}
 
 }

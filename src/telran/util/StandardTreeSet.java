@@ -3,7 +3,7 @@ package telran.util;
 import java.util.Iterator;
 
 public class StandardTreeSet<T> implements SortedSet<T> {
-private java.util.TreeSet<T> treeSet = new java.util.TreeSet<>();
+private TreeSet<T> treeSet = new TreeSet<>();
 	@Override
 	public boolean add(T obj) {
 	
@@ -47,9 +47,8 @@ private java.util.TreeSet<T> treeSet = new java.util.TreeSet<>();
 	}
 
 	@Override
-	public T ceiling(T pattern) {
-		
-		return treeSet.ceiling(pattern);
+	public T ceiling(T pattern) {		
+		return treeSet.ceiling(pattern); 
 	}
 
 	@Override

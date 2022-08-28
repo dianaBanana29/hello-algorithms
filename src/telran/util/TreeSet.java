@@ -367,39 +367,33 @@ public class TreeSet<T> extends AbstractCollection<T> implements SortedSet<T> {
 
 	@Override
 	public T ceiling(T pattern) {
-		if (findObject(pattern)) {
-			return pattern;
-		}
 		T res = null;
 		for (T obj : this) {
-			if (comp.compare(obj, pattern) < 0) {
+			if(obj.equals(pattern)) {
+				return obj;
+			}
+			if (comp.compare(obj, pattern) > 0) {
 				res = obj;
+				break;
 			}
 		}
 		return res;
 	}
+		
 
 	@Override
 	public T floor(T pattern) {
-		T prev = null;
-		if (findObject(pattern)) {
-			return pattern;
-		}
+	T prev = null;
 		for (T obj : this) {
+			if(obj.equals(pattern)) {
+				return obj;
+			}
 			if (comp.compare(obj, pattern) > 0) {
 				return prev;
 			}
 			prev = obj;
 		}
-		return prev;
+		return prev; 
 	}
-
-	private boolean findObject(T pattern) {
-		for (T obj : this) {
-			if (obj.equals(pattern)) {
-				return true;
-			}
-		}
-		return false;
-	}
+	
 }
